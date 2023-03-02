@@ -1,0 +1,34 @@
+﻿@model VehicleMakeDto
+
+<h1>
+    Marka Düzenleme : @Model.Id ID'li Kayıt
+</h1>
+
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+        @if (ViewData.ContainsKey("ErrorMessage"))
+        {
+            @MessageHelper.DisplayError(ViewBag.ErrorMessage)
+        }
+        <form asp-controller="VehicleMakes" asp-action="Update" method="post">
+            <div class="mb-3">
+                <label for="id" class="form-label">Id</label>
+                <input type="text" id="id" name="id" class="form-control" value="@Model.Id" readonly />
+
+                <label for="name" class="form-label">Marka Adı</label>                
+                <input type="text" id="name" name="name" class="form-control" value="@Model.Name"/>
+
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success">
+                        Güncelle
+                    </button>
+                    <button asp-controller="VehicleMakes" asp-action="Index" class="btn btn-warning">
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

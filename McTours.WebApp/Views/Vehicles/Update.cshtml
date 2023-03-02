@@ -1,0 +1,46 @@
+﻿@model VehicleDto
+<h1>Araç Model Özellikleri Güncelleme</h1>
+<div action="row">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+        @if (TempData.ContainsKey("SuccessMessage"))
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (ViewData.ContainsKey("ErrorMessage"))
+        {
+            @MessageHelper.DisplayError((string)ViewData["ErrorMessage"])
+            ;
+        }
+        <form asp-controller="Vehicles" asp-action="Update" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Araç:</label>
+                <select asp-for="VehicleDefinitionId" asp-items="ViewBag.Definitions" class="form-select" disabled>
+                    <option value="">.:: Lütfen Seçiniz ::..</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Plaka:</label>
+                <input type="text" id="name" name="PlateNumber" class="form-control" value="@Model?.PlateNumber" />
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Ruhsat Numarası:</label>
+                <input type="text" id="name" name="RegistrationNumber" class="form-control" value="@Model?.RegistrationNumber" />
+            </div>
+            <div class="mb-3">
+                <label for="start" class="form-label">Trafiğe Çıkış Tarihi:</label>
+                <input asp-for="RegistrationDate" type="date" class="form-control" min="2010-01-01" max="2030-12-31" />
+                @*<input type="date" id="start" name="RegistrationDate" class="form-control" value="@Model?.RegistrationDate.ToString("dd-MM-yyyy")" min="2010-01-01" max="2030-12-31" />*@
+            </div>
+            <div class="mb-3">
+                <div class="text-end">
+                    <a class="btn btn-outline-warning" asp-action="Index">İptal</a>
+                    <button class="btn btn-outline-success">
+                        Güncelle
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

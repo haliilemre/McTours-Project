@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\McTours.DataAccess\McTours.DataAccess.csproj" />
+    <ProjectReference Include="..\McTours.Domain\McTours.Domain.csproj" />
+    <ProjectReference Include="..\McTours\McTours.csproj" />
+  </ItemGroup>
+
+</Project>

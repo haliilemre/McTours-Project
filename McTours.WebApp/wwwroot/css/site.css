@@ -1,0 +1,75 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.table tbody tr:hover {
+    background-color: darkslategray;
+    color: #FFFFFF;
+}
+
+.form-label {
+    font-size: larger;
+}
+
+.navbar-collapse ul li:hover {
+    background-color: bisque;
+}
+
+    .navbar-collapse ul li:hover a {
+        color: white;
+    }
+
+.bus-seat {
+    width: 35px;
+    height: 35px;
+    border: 1px solid gray;
+    display: inline-block;
+    margin: 1px;
+    font-size: 16px;
+}
+
+
+/* Manuel responsive css yazma */
+@media (min-width: 768px) {
+    .bus-seat {
+        width: 50px;
+        height: 50px;
+        border: 2px solid gray;
+        display: inline-block;
+        margin: 2px;
+    }
+}
+
+/* Bus Seat hover efekti */
+.bus-seat:hover {
+    background-color: darkcyan;
+}
+
+.bus-seat.sold {
+    background-color: indianred;
+    cursor: default;
+}
+
+.bus-seat.empty {
+    background-color: lightgreen;
+}
+
+.bus-seat.selected {
+    background-color: darkcyan;
+    color: whitesmoke;
+}

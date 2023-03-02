@@ -1,0 +1,103 @@
+﻿@model VehicleDefinitionDto
+
+<h1>
+    Yeni Araç Tanımı
+</h1>
+
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            @MessageHelper.DisplaySuccess(TempData.GetString(Keys.SuccessMessage))
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            @MessageHelper.DisplayError(TempData.GetErrorMessage())
+        }
+
+
+        <form asp-controller="VehicleDefinitions" asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="VehicleMakeId" class="form-label"> Marka Adı </label>
+                <select asp-for="VehicleMakeId"  asp-items="ViewBag.VehicleMakes" class="form-select">
+                <option value="">Lütfen Seçiniz</option>
+                </select>
+
+                <div class="mb-3">
+                    <label asp-for="VehicleModelId" class="form-label"> Model Adı </label>
+                    <select asp-for="VehicleModelId" asp-items="ViewBag.VehicleModels" class="form-select">
+                    <option value="">Lütfen Seçiniz</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Year" class="form-label">Year</label>
+                    <input asp-for="Year" type="text" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SeatingType" class="form-label"> Koltuk Tipi </label>
+                    <select asp-for="SeatingType" asp-items="ViewBag.SeatingTypes" class="form-select">
+                        <option value="">Lütfen Seçiniz</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LineCount" class="form-label">Toplam Koltuk Sırası</label>
+                    <input asp-for="LineCount" type="text" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FuelType" class="form-label"> Yakıt Tipi </label>
+                    <select asp-for="FuelType" asp-items="ViewBag.FuelTypes" class="form-select">
+                        <option value="">Lütfen Seçiniz</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ek Hizmetler</label>
+                    @foreach (ValueNameObject obj in ViewBag.Utilities)
+                    {
+                        <div>
+                            <input type="checkbox" id="utility_@obj.Value" name="Utilities" value="@obj.Value" />
+                            <label for="utility_@obj.Value">@obj.Name</label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success" type="submit">
+                        Kaydet
+                    </button>
+                    <button asp-controller="VehicleDefinitions" asp-action="Index" class="btn btn-warning">
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#VehicleMakeId").change(function () {
+                var getMakeId = $("#VehicleMakeId option:selected").val();
+                $.ajax({ // ajax request açıyoruz
+                    url: `/VehicleDefinitions/GetModels/${getMakeId}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var modelList = document.getElementById('VehicleModelId');
+                        $(modelList).empty();
+                        for (var i = 0; i < data.length; i++) {
+                            $(modelList).append('<option name="VehicleModelId" + id= ' + data[i].id + ' value=' + data[i].id + '>' + data[i].name + '</option>');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

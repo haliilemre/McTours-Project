@@ -1,0 +1,36 @@
+﻿@model TicketReview
+
+<h4>Bilet Bilgileri</h4>
+<div class="row">
+    <div class="col-12">
+
+        <form id="ticket_save_form" asp-controller="Tickets" asp-action="Create" method="post">
+            <input type="hidden" asp-for="BusTripId" />
+            <input type="hidden" asp-for="PassengerId" />
+            <div class="mb-3">
+                <label asp-for="PassengerFirstName">Yolcu Adı</label>
+                <input asp-for="PassengerFirstName" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PassengerLastName">Yolcu SoyAdı</label>
+                <input asp-for="PassengerLastName" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SeatNumber">Koltuk No</label>
+                <input asp-for="SeatNumber" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price">Ücret</label>
+                <input asp-for="Price" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3 text-end">
+                <button form="ticket_save_form" type="submit" class="btn btn-success">Bileti Kaydet</button>
+            </div>
+
+        </form>
+    </div>
+</div>

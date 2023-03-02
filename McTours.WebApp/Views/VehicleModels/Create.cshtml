@@ -1,0 +1,59 @@
+﻿@using McTours.VehicleModels;
+@model VehicleModelDto
+
+<h1>
+    Yeni Model
+</h1>
+
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+        @*@if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }*@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            @MessageHelper.DisplaySuccess(TempData.GetString(Keys.SuccessMessage))
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            @MessageHelper.DisplayError(TempData.GetErrorMessage())
+        }
+
+
+        <form asp-controller="VehicleModels" asp-action="Create" method="post">
+            <div class="mb-3">
+                <label for="vehicle_make_id" class="form-label">Marka Adı</label>
+                @*@Html.DropDownListFor(x=>x.VehicleMakeId,(List<SelectListItem>)ViewBag.VehicleMakes, new { @class = "form-control"})*@
+                <select class="form-select" id="vehicle_make_id" name="vehicleMakeId">
+                    @foreach (VehicleMakeDto vehicleMake in ViewBag.VehicleMakes)
+                    {
+                        if (Model?.VehicleMakeId == vehicleMake.Id)
+                        {
+                            <option value="@vehicleMake.Id" selected>@vehicleMake.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@vehicleMake.Id">@vehicleMake.Name</option>
+                        }
+                    }
+                </select>
+
+                <label for="name" class="form-label">Model Adı</label>
+                <input type="text" id="name" name="name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success">
+                        Kaydet
+                    </button>
+                    <button asp-controller="VehicleModels" asp-action="Index" class="btn btn-warning">
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

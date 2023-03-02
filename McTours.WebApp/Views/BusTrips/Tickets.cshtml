@@ -1,0 +1,146 @@
+﻿@using McTours;
+
+@model BusTripSummary
+<h1>
+    @Model.Name
+    <br />
+    <small>
+        @Model.VehicleName
+    </small>
+</h1>
+
+<div class="row mt-5">
+    <div id="panel1" class="col-6 col-sm-5 col-lg-4 col-xl-3">
+
+        @await Component.InvokeAsync("BusTripSeats", new {id = Model.Id})
+
+    </div>
+
+    <div id="panel2" class="col-6 col-sm-7 col-lg-8 col-xl-9">
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        //var seats = document.getElementsByClassName("bus-seat");
+
+        //for (let i = 0; i < seats.length; i++) {
+        //    seats[i].addEventListener('click', function () { });
+        //}
+
+        $('.bus-seat.empty').click(function () {
+
+
+            $('.bus-seat.selected').removeClass('selected');
+            this.classList.add('selected'); //document.body.classList.add("selected"); // $(this).addClass('selected'); JQuery hali.
+
+            let seatNumber = parseInt(this.dataset.seatNumber);
+
+            $.ajax({
+                //url: '/Passengers/SearchPassengers'
+                url: '@Url.Action("SearchPassengers", "Passengers")',
+                type: 'get',
+                success: function (response) {
+                    $('#panel2').html(response); //parametreyle çağırırsak set parametresiz çağırırsak get
+                    $('#search_passengers_button').click(function () { // bu bölümü senkron özelliği vererek successin dışına da yazabilirdik.
+                        $.ajax({
+                            url: '@Url.Action("SearchPassengers", "Passengers")',
+                            type: 'post',
+                            //data: {
+                            //    // JS'te nesnenin prop isimlerini string olarak da tanımlayabiliriz.
+                            //    'identityNumber': $('#IdentityNumber').val(), //inputtan gelen değer boş gönderdiğimiz için get. dolu gönderseydik set olurdu.
+                            //    firstname: $('#FirstName').val(),
+                            //    lastname: $('#LastName').val() // lastname'i baş harfini büyük de yazabilirdik ama mvc bunu otomatik olarak algılayıp property ile eşleştirir.
+                            //}
+                            data: $('#search_passengers_form').serialize(), // formdaki inputları otomatik olarak aspfor
+                            dataType: 'json',
+                            success: function (passengers) {
+                                // JSON => JS DOM içerisinde varsayılan, bütünleşik gelen global bir nesne.
+                                /*JSON.parse(passengers)*/ // JSON.parse(jsonDeğişken) => strin JSON'ı JS nesnesine dönüştür.
+                                // JSON.stringify(nesneDeğişken) => JS nesneyi JSON string'e dönüştürür.
+                                // stringify => Serialize
+                                // parse => Deserialize
+
+                                $('#search_passengers_table > tbody').html(null);
+                                $('#create_passenger_button').remove();
+
+                                if (passenger.length) {
+                                    for (let i = 0; i < passengers.length; i++) {
+
+                                        let passenger = passengers[i];
+                                        let tableRow = $('<tr>'); // her adımda bir tr oluştur.
+                                        let identityNumberCell = $('<td>').text(passenger.identityNumber);
+                                        let firstNameCell = $('<td>').text(passenger.firstName);
+                                        let lastNameCell = $('<td>').text(passenger.lastName);
+                                        let genderCell = $('<td>').text(passenger.genderName);
+
+                                        tableRow
+                                            .append(identityNumberCell)
+                                            .append(firstNameCell)
+                                            .append(lastNameCell)
+                                            .append(genderCell);
+
+                                        tableRow.click(function () {
+                                            let ajaxData = {
+                                                busTripId: @Model.Id,
+                                                passengerId: passenger.id,
+                                                seatNumber: seatNumber
+                                            };
+
+                                            $ajax({
+                                                url: '@Url.Action("BusTripTicketCreate", "Tickets")',
+                                                type: 'post',
+                                                data: ajaxData,
+                                                success: function (ticketReviewPage) {
+                                                    $('#panel2').html(ticketReviewPage);
+                                                }
+                                            });
+                                        });
+                                        $('#search_passengers_table > tbody').append(tableRow); // search_passengers_table'ın altındaki tbody'e tableRow'u yolla ekle.
+                                    }
+                                }
+                                else {
+                                    let tableRow = $('<tr>');
+                                    let emptyCell = $('<td colspan="4">').text('Kayıt Bulunamadı');
+
+                                    tableRow.append(emptyCell);
+                                    $('#search_passengers_table > tbody').append(tableRow);
+
+
+                                    let newPassengerButton = $('<button>')
+                                        .attr('id', 'create_passenger_button')
+                                        .text('Yeni Ekle')
+                                        .addClass('btn btn-outline-primary');
+
+                                    newPassengerButton.click(function () { });
+
+                                    // TAMAMLA
+
+                                    $('#search_passengers_table').after(newPassengerButton);
+                                }
+                            }
+                        });
+                    });
+
+                    //let href = ('#FirstName').attr('href') // get
+                    //$('a_elementinin_selector').attr('href', 'https://google.com') // set
+                },
+
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $('.bus-seat.sold').click(function () {
+            // ajax ile Tickets controller'dan GetTicketInfo gibi bir metodu çağır TicketReview döndürebilir*
+            // Parametreler BusTripId, SeatNumber
+        })
+
+        var $seats = $('bus-seat')
+
+        function seatClick(seatNumber) {
+
+        }
+    </script>
+}

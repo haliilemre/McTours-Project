@@ -1,0 +1,78 @@
+﻿@model IEnumerable<VehicleDefinitionSummary>
+
+<h1>Tüm Modeller</h1>
+
+<div class="row">
+    <div class="col-12">
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            @MessageHelper.DisplaySuccess(TempData.GetString(Keys.SuccessMessage))
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            @MessageHelper.DisplayError(TempData.GetErrorMessage())
+        }
+
+        <div class="float-end">
+            <a class="btn btn-outline-primary btn-sm" asp-controller="VehicleDefinitions" asp-action="Create">
+                Yeni Marka Modeli
+            </a>
+        </div>
+
+        <table class="table table-striped table-hover ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Marka Adı</th>
+                    <th>Model Adı</th>
+                    <th>Yıl</th>
+                    <th>Yakıt Tipi</th>
+                    <th>Koltuk Tipi</th>
+                    <th>Koltuk Sıra Sayısı</th>
+                    <th>Ek Hizmetler</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vehDefinition in Model)
+                {
+                    <tr>
+                        <td>@vehDefinition.Id</td>
+                        <td>@vehDefinition.VehicleMakeName</td>
+                        <td>@vehDefinition.VehicleModelName</td>
+                        <td>@vehDefinition.Year</td>
+                        <td>@vehDefinition.FuelTypeName</td>
+                        <td>@vehDefinition.SeatingTypeName</td>
+                        <td>@vehDefinition.LineCount</td>
+                        <td>@vehDefinition.UtilityNames</td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="VehicleDefinitions" asp-action="Update" asp-route-id="@vehDefinition.Id">Düzenle</a>
+                            <form asp-action="Delete" method="post" class="delete-form d-inline-block">
+                                <input type="hidden" value="@vehDefinition.Id" name="id">
+                                <button class="btn btn-outline-danger btn-sm">Sil</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let deleteForms = document.getElementsByClassName('delete-form');
+
+        for (let i = 0; i < deleteForms.length; i++) {
+            deleteForms[i].addEventListener('submit', function (e) {
+
+                let isConfirmed = confirm('Dikkat!!! Bu kayıt silinecek. Devam etmek istiyor musunuz?'); // silme işlemi sırasında onay pop-up'ı çıkarıyoruz
+                if (!isConfirmed) {
+                    e.preventDefault(); // silme işleminin önüne geçmemizi sağlar.
+                }
+            });
+        }
+    </script>
+}

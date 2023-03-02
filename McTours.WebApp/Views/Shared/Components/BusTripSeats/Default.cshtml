@@ -1,0 +1,51 @@
+﻿@model BusTripSeatsModel
+
+@functions {
+    public HtmlString GetBusSeatClass(ICollection<int> soldSeatNumbers, int seatNumber)
+    {
+        if (soldSeatNumbers.Contains(seatNumber))
+        {
+            return new HtmlString("btn bus-seat sold");
+        }
+        else
+        {
+            return new HtmlString("btn bus-seat empty");
+        }
+    }
+}
+
+<div id="bus_seatings">
+
+    @{
+        var seatNumber = 0;
+
+        @for (int i = 0; i < Model.BusSeatingLineCount; i++)
+        {
+            if (Model.BusSeatingType == SeatingType.Standard)
+            {
+
+                <div class="@GetBusSeatClass(Model.SoldSeatNumbers, ++seatNumber)" data-seat-number="@(seatNumber)">@seatNumber</div>
+                <div class="@GetBusSeatClass(Model.SoldSeatNumbers, ++seatNumber) me-2" data-seat-number="@(seatNumber)">@seatNumber</div>
+
+                <div class="@GetBusSeatClass(Model.SoldSeatNumbers, ++seatNumber)" data-seat-number="@(seatNumber)">@seatNumber</div>
+                <div class="@GetBusSeatClass(Model.SoldSeatNumbers, ++seatNumber)" data-seat-number="@(seatNumber)">@seatNumber</div>
+                <br />
+            }
+            else if (Model.BusSeatingType == SeatingType.Deluxe)
+            {
+                <div id="@seatNumber" onclick"seatClick()this.id" class="bus-seat btn me-2" data-seat-number="@(++seatNumber)">@seatNumber</div>
+
+                <div class="bus-seat btn" data-seat-number="@(++seatNumber)">@seatNumber</div>
+                <div class="bus-seat btn" data-seat-number="@(++seatNumber)">@seatNumber</div>
+                <br />
+            }
+            else if (Model.BusSeatingType == SeatingType.Vip)
+            {
+                <div class="bus-seat me-2 btn" data-seat-number="@(++seatNumber)">@seatNumber</div>
+
+                <div class="bus-seat btn" data-seat-number="@(++seatNumber)">@seatNumber</div>
+                <br />
+            }
+        }
+    }
+</div>
